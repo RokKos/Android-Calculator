@@ -117,8 +117,9 @@ public class MainActivity extends Activity {
                 case R.id.ZbrisiZnak:
                     if(mMathString.length()>0){
                         mMathString.deleteCharAt(mMathString.length()-1);
+                        updateWebView(false);
                         if(mMathString.length()==0){
-                            f=false;
+                            mWebView.loadData("","text/html", "null");
                         }
                     }
                     break;
@@ -126,26 +127,23 @@ public class MainActivity extends Activity {
                 case R.id.ZbrisiVse:
                     if(mMathString.length()>0){
                         mMathString.delete(0, mMathString.length());
-                        f=false; // ko vse zbrise ne evalvira ker drugace pride undefined
+                        mWebView.loadData("","text/html", "null"); // ko vse zbrise ne evalvira ker drugace pride undefined
                     }
+                    break;
+                case R.id.JeEnako:
+                    updateWebView(true);
                     break;
                 //Drugace pa doda znak
                 default:
                     mMathString.append(((Button) v).getText());
-                    f=true;
-            }
-            if (f){
-                updateWebView(); //osvezi polje s tekstom
-            }
-            else{
-                mWebView.loadData("","text/html", "null");
+                    updateWebView(false); //samo osvezi input ne pa output
             }
 
         }
 
     }
 
-    private void updateWebView() {
+    private void updateWebView(boolean show) {
 
         StringBuilder builder = new StringBuilder();
 
@@ -153,11 +151,13 @@ public class MainActivity extends Activity {
         builder.append("<script type=\"text/javascript\">document.write('");
         builder.append(mMathString.toString()); //izraz
         builder.append("');");
-        builder.append("document.write('<br />=' + eval(\""); //Evalvira
-        builder.append(mMathString.toString());//resen izraz
-        builder.append("\"));</script>");
+        if (show==true){
+            builder.append("document.write('<br />=' + eval(\""); //Evalvira
+            builder.append(mMathString.toString());//resen izraz
+            builder.append("\"));");
+        }
+        builder.append("</script>");
         builder.append("</body></html>");
-
         mWebView.loadData(builder.toString(), "text/html", "null");
     }
 
