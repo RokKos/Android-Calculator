@@ -24,17 +24,13 @@ public class MainActivity extends Activity {
     public WebView mWebView;
     private StringBuilder mMathString;
     private ClickListner GUMB;
+    private String ANS = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
 
-        /*if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }*/
         //naredi nov string
         mMathString = new StringBuilder();
 
@@ -50,7 +46,9 @@ public class MainActivity extends Activity {
                 R.id.button7, R.id.button8, R.id.button9, R.id.LeviZaklepaj,
                 R.id.Deljeno, R.id.DesniZaklepaj, R.id.Krat,
                 R.id.Minus, R.id.Pika, R.id.ZbrisiVse,
-                R.id.ZbrisiZnak, R.id.JeEnako, R.id.Plus};
+                R.id.ZbrisiZnak, R.id.JeEnako, R.id.Plus,
+                //R.id.sin, R.id.cos
+        };
         for (int id : SeznamGumbov){
             View v = findViewById(id);
             v.setOnClickListener(GUMB);
@@ -69,9 +67,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
@@ -79,9 +75,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
+
     public static class PlaceholderFragment extends Fragment {
 
         public PlaceholderFragment() {
@@ -133,6 +127,8 @@ public class MainActivity extends Activity {
                 case R.id.JeEnako:
                     updateWebView(true);
                     break;
+                //case R.id.sin:
+                //    mMathString.append(((Button) v).getText());
                 //Drugace pa doda znak
                 default:
                     mMathString.append(((Button) v).getText());
@@ -159,6 +155,7 @@ public class MainActivity extends Activity {
         builder.append("</script>");
         builder.append("</body></html>");
         mWebView.loadData(builder.toString(), "text/html", "null");
+        ANS = builder.toString();
     }
 
 }
